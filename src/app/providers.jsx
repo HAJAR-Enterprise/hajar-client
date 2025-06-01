@@ -4,14 +4,18 @@ import * as React from "react";
 
 // 1. import `HeroUIProvider` component
 import {HeroUIProvider} from "@heroui/react";
+import { GOOGLE_CLIENT_ID } from "./lib/environment";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 function Providers({children}) {
-  // 2. Wrap HeroUIProvider at the root of your app
-  return (
-    <HeroUIProvider>
-      {children}
-    </HeroUIProvider>
-  );
+    // 2. Wrap HeroUIProvider at the root of your app
+    return (
+        <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+            <HeroUIProvider>
+                {children}
+            </HeroUIProvider>
+        </GoogleOAuthProvider>
+    );
 }
 
 export default Providers;

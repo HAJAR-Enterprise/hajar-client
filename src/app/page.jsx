@@ -1,13 +1,15 @@
 "use client";
 
-import { Button } from "@heroui/react";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function Home() {
-  return (
-    <div className="font-outfit text-2xl text-center">
-    <Button>
-      Test
-    </Button>
-    </div>
-  );
+  const router = useRouter();
+
+  useEffect(() => {
+    router.push("/login"); // redirect ke halaman login
+  }, [router]);
+
+  return null; // tidak perlu render apa-apa di halaman ini
 }
+
