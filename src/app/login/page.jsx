@@ -3,7 +3,7 @@
 import {useGoogleLogin} from "@react-oauth/google";
 import Cookies from "js-cookie";
 import {useRouter} from "next/navigation";
-import { BASE_API } from "../lib/environment";
+import {BASE_API} from "../../lib/environment";
 
 export default function LoginPage() {
     const router = useRouter()
@@ -12,11 +12,7 @@ export default function LoginPage() {
         onSuccess: async (tokenResponse) => {
             try {
                 const accessToken = tokenResponse.access_token;
-
-                // Optionally store it for reuse (e.g., dashboard page)
-                Cookies.set('accessToken', accessToken, {
-                    expires: 1 / 24
-                });
+                
 
                 // Optionally get user info
                 const userInfoRes = await fetch(
@@ -32,29 +28,33 @@ export default function LoginPage() {
                 console.log('[✅ User Info]', userInfo);
 
                 // Send to backend
-                const res = await fetch(BASE_API + '/youtube/videos', {
+                const res = await fetch(BASE_API + '/user/register', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({accessToken})
+                    body: JSON.stringify({userInfo, accessToken})
                 });
 
+              if (res.ok) {
                 const data = await res.json();
-                console.log('[✅ Videos from backend]', data);
+                
+                Cookies.set('authorization', data.token, { expires: 1 / 24 }); // Store access token in cookies
+                router.push('/dashboard'); // Redirect to dashboard after login
+              } else { 
+                alert("Failed to register user");
+              }
 
                 // Optional: redirect to dashboard router.push('/dashboard');
 
             } catch (error) {
                 console.error(error);
-                toast.error("Failed to login with Google");
-            } finally {
-                router.push('/dashboard'); // Redirect to dashboard after login
-            }
+                alert("Failed to login with Google");
+            } 
         },
 
         onError: (error) => {
-            toast.error("Google login failed");
+            alert("Google login failed");
         },
         scope: 'https://www.googleapis.com/auth/youtube.readonly https://www.googleapis.com/au' +
                 'th/youtube.force-ssl'

@@ -4,7 +4,7 @@ import * as React from "react";
 
 // 1. import `HeroUIProvider` component
 import {HeroUIProvider} from "@heroui/react";
-import { GOOGLE_CLIENT_ID } from "./lib/environment";
+import { GOOGLE_CLIENT_ID } from "../lib/environment";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 
 function Providers({children}) {
